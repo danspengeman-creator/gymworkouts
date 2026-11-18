@@ -505,6 +505,7 @@ function loadState() {
       S = Object.assign(d, p);
       S.cfg = Object.assign(d.cfg, p.cfg || {});
       S.sync = Object.assign(d.sync, p.sync || {});
+      S.cfg.units = "lb"; /* US only: pounds and inches */
     }
   } catch (e) { console.warn("load failed", e); }
 }
@@ -938,7 +939,7 @@ function mergeItem(it) {
     if (it.ts > S.cloudTs) {
       const keepU = S.cfg.scriptUrl, keepK = S.cfg.key, keepT = S.cfg.theme;
       if (d.cfg) S.cfg = Object.assign(S.cfg, d.cfg);
-      S.cfg.scriptUrl = keepU; S.cfg.key = keepK; S.cfg.theme = keepT;
+      S.cfg.units = "lb"; S.cfg.scriptUrl = keepU; S.cfg.key = keepK; S.cfg.theme = keepT;
       S.exOv = d.exOv || {}; S.slotPick = d.slotPick || {}; S.custom = d.custom || [];
       S.videos = d.videos || {}; S.hidden = d.hidden || {}; S.paceHist = d.paceHist || S.paceHist;
       S.cloudTs = it.ts;
@@ -1440,8 +1441,7 @@ function viewSettings() {
       '<button class="chip' + (c.avoid.indexOf(f[0]) >= 0 ? " on" : "") + '" data-act="cfgAvoid" data-v="' + f[0] + '">' + f[1] + "</button>").join("") + "</div></div></div>";
   h += '<div class="card"><h2>Deload</h2><div class="sm mut" style="margin-bottom:10px">' + (inDeload() ? "Deload is on until " + fmtDate(c.deloadUntil) + "." : "Every 6 weeks or so, a lighter week helps you recover and keep progressing.") + "</div>" +
     (inDeload() ? '<button class="btn block" data-act="deloadOff">End deload now</button>' : '<button class="btn block" data-act="deloadOn">Start a 7 day deload</button>') + "</div>";
-  h += '<div class="card"><h2>Display and workout</h2><div class="field"><label>Units</label><div class="chips">' + ["lb", "kg"].map(u => '<button class="chip' + (c.units === u ? " on" : "") + '" data-act="cfgSet" data-k="units" data-v="' + u + '">' + u + "</button>").join("") + "</div></div>" +
-    '<div class="field"><label>Theme</label><div class="chips">' + [["auto", "Match phone"], ["light", "Light"], ["dark", "Dark"]].map(u => '<button class="chip' + (c.theme === u[0] ? " on" : "") + '" data-act="cfgSet" data-k="theme" data-v="' + u[0] + '">' + u[1] + "</button>").join("") + "</div></div>" +
+  h += '<div class="card"><h2>Display and workout</h2>' + '<div class="field"><label>Theme</label><div class="chips">' + [["auto", "Match phone"], ["light", "Light"], ["dark", "Dark"]].map(u => '<button class="chip' + (c.theme === u[0] ? " on" : "") + '" data-act="cfgSet" data-k="theme" data-v="' + u[0] + '">' + u[1] + "</button>").join("") + "</div></div>" +
     '<div class="sw"><div>Warm-up reminder</div>' + tg(c.warm, "cfgToggle", "warm") + "</div>" +
     '<div class="sw"><div>Rest timer sound</div>' + tg(c.sound, "cfgToggle", "sound") + "</div>" +
     '<div class="sw"><div>Vibrate when rest ends</div>' + tg(c.vibrate, "cfgToggle", "vibrate") + "</div>" +
@@ -1732,7 +1732,6 @@ function sheetSetup(s) {
     '<div class="field"><label>Days per week</label>' + chipRow("days", [[2, "2"], [3, "3"], [4, "4"]], s.days) + "</div>" +
     '<div class="field"><label>Usual time at the gym</label>' + chipRow("minutes", [[30, "30"], [45, "45"], [60, "60"], [75, "75"], [90, "90"]], s.minutes) + "</div>" +
     '<div class="field"><label>Focus</label><div class="chips">' + [["full", "Full body"], ["upper", "Chest, shoulders and arms"], ["core", "Core and abs"], ["lower", "Legs and glutes"]].map(f => '<button class="chip' + (s.focus.indexOf(f[0]) >= 0 ? " on" : "") + '" data-act="sfFocus" data-v="' + f[0] + '">' + f[1] + "</button>").join("") + "</div></div>" +
-    '<div class="field"><label>Units</label>' + chipRow("units", [["lb", "Pounds"], ["kg", "Kilograms"]], s.units) + "</div>" +
     '<button class="btn pri big block" data-act="setupSave">Build my plan</button>');
 }
 A.setupSave = () => {
