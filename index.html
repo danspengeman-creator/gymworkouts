@@ -477,6 +477,7 @@ const TAG_FOCUS = { chest: "upper", delts: "upper", arms: "upper", core: "core",
 /* ===== Core state, helpers, planning and coaching engine ===== */
 const LS_KEY = "gymcoach.v1";
 const KG = 0.45359237;
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPIsPRr5JpyR8Mo7rU0zQkND306wtuCxz1FQ4X-adRkrYUzBqZlfox6lE7havkXZTjGw/exec";
 
 function defaultState() {
   return {
@@ -484,7 +485,7 @@ function defaultState() {
     cfg: {
       name: "", days: 4, minutes: 50, focus: ["full", "upper", "core"], units: "lb", theme: "auto",
       avoid: [], sound: true, vibrate: true, wake: true, warm: true, setupDone: false,
-      scriptUrl: "", key: "", deloadUntil: "", lastDeload: ""
+      scriptUrl: SCRIPT_URL, key: "", deloadUntil: "", lastDeload: ""
     },
     exOv: {}, slotPick: {}, custom: [], videos: {}, hidden: {},
     sessions: [], body: [], paceHist: [],
@@ -506,6 +507,7 @@ function loadState() {
       S.cfg = Object.assign(d.cfg, p.cfg || {});
       S.sync = Object.assign(d.sync, p.sync || {});
       S.cfg.units = "lb"; /* US only: pounds and inches */
+      if (!S.cfg.scriptUrl) S.cfg.scriptUrl = SCRIPT_URL;
     }
   } catch (e) { console.warn("load failed", e); }
 }
